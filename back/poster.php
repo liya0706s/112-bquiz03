@@ -112,7 +112,7 @@ $(".btn").on("click",function(){
     let sw=$(this).data('sw');
     let table='poster';
     // 這個項目的id 和交換的項目的id
-    // 還要帶參數table不同頁都要一起控制
+    // 還要帶參數table不同頁(電影院線片)都要一起控制
     $.post("./api/sw.php",{id,sw,table},()=>{
         location.reload();
     })
