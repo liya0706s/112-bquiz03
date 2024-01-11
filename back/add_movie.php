@@ -1,6 +1,8 @@
 <style>
+    /* form元素底下的第一個td child */
     .form td:nth-child(1) {
         text-align-last: justify;
+        /* 文字分散對齊 */
 
     }
 </style>

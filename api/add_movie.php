@@ -3,7 +3,7 @@
 // 將資料(back/add_movie.php) 對應資料表中的欄位 都save存進資料庫 和to到下個網頁:
 // 資料表中有11個欄位: id, name, level, length, ondate, publish, director, trailer, poster, intro, sh, rank 
 
-if(isset($_FILES['tralier']['tmp_name'])){
+if(isset($_FILES['trailer']['tmp_name'])){
     move_uploaded_file($_FILES['trailer']['tmp_name'],"../img/{$_FILES['trailer']['name']}");
     $_POST['trailer']=$_FILES['trailer']['name'];
 }
