@@ -36,7 +36,14 @@
       </div>
       <div class="rb tab">
         <?php
-
+        $do = $_GET['do'] ?? 'main';
+        $file = "./back/{$do}.php";
+        if (file_exists($file)) {
+          include $file;
+        } else {
+          // 要寫else，避免被打亂碼導不到網址
+          include "./back.php/main.php";
+        }
         ?>
       </div>
     </div>

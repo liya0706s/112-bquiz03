@@ -28,7 +28,14 @@
     </div>
     <div id="mm">
       <?php
-
+      $do = $_GET['do'] ?? 'main';
+      $file = "./index/{$do}.php";
+      if (file_exists($file)) {
+        include $file;
+      } else {
+        // 要寫else，避免被打亂碼導不到網址
+        include "./index.php/main.php";
+      }
       ?>
     </div>
     <div id="bo"> ©Copyright 2010~2014 ABC影城 版權所有 </div>
