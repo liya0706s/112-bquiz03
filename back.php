@@ -1,3 +1,17 @@
+<?php include_once "./api/db.php";
+
+// 如果POST有送帳號密碼資料過來且不是空的
+if (!empty($_POST)) {
+  if ($_POST['acc'] == 'admin' && $_POST['pw'] == '1234') {
+    $_SESSION['login'] = 1;
+    // SESSION有值就可以算登入成功
+  } else {
+    // 否則就是登入錯誤
+    $error = "<div class='ct' style='color:red'>帳號或密碼錯誤</div>";
+  }
+}
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0055)?do=admin -->
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -27,25 +41,58 @@
       </marquee>
     </div>
     <div id="mm">
-      <div class="ct a rb" style="position:relative; width:101.5%; left:-1%; padding:3px; top:-9px;">
-        <a href="?do=tit">網站標題管理</a>|
-        <a href="?do=go">動態文字管理</a>|
-        <a href="?do=poster">預告片海報管理</a>|
-        <a href="?do=movie">院線片管理</a>|
-        <a href="?do=order">電影訂票管理</a>
-      </div>
-      <div class="rb tab">
-        <?php
-        $do = $_GET['do'] ?? 'main';
-        $file = "./back/{$do}.php";
-        if (file_exists($file)) {
-          include $file;
-        } else {
-          // 要寫else，避免被打亂碼導不到網址
-          include "./back.php/main.php";
-        }
-        ?>
-      </div>
+      <?php
+      if (isset($_SESSION['login'])) {
+        // 如果有login以下都看得到
+      ?>
+        <div class="ct a rb" style="position:relative; width:101.5%; left:-1%; padding:3px; top:-9px;">
+          <a href="?do=tit">網站標題管理</a>|
+          <a href="?do=go">動態文字管理</a>|
+          <a href="?do=poster">預告片海報管理</a>|
+          <a href="?do=movie">院線片管理</a>|
+          <a href="?do=order">電影訂票管理</a>
+        </div>
+        <div class="rb tab">
+
+          <?php
+          $do = $_GET['do'] ?? 'main';
+          $file = "./back/{$do}.php";
+          if (file_exists($file)) {
+            include $file;
+          } else {
+            // 要寫else，避免被打亂碼導不到網址
+            include "./back/main.php";
+          }
+          ?>
+        </div>
+      <?php
+      } else {
+      ?>
+        <form action="?" method="post" style="width: 50%;margin-top:20px auto">
+          <h3 class="ct">管理者登入</h3>
+          <!-- 如果登入錯誤會顯示紅字帳號密碼錯誤 -->
+          <?php
+          if (isset($error)) {
+            echo $error;
+          }
+          ?>
+          <table>
+            <tr>
+              <td>帳號:</td>
+              <td><input type="text" name="acc"></td>
+            </tr>
+            <tr>
+              <td>密碼:</td>
+              <td><input type="password" name="pw"></td>
+            </tr>
+          </table>
+          <div class="ct">
+            <input type="submit" value="登入">
+          </div>
+        </form>
+      <?php
+      }
+      ?>
     </div>
     <div id="bo"> ©Copyright 2010~2014 ABC影城 版權所有 </div>
   </div>
