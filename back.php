@@ -1,6 +1,6 @@
 <?php include_once "./api/db.php";
 
-// 如果POST有送帳號密碼資料過來且不是空的
+// 判斷如果POST有送帳號密碼資料過來且不是空的
 if (!empty($_POST)) {
   if ($_POST['acc'] == 'admin' && $_POST['pw'] == '1234') {
     $_SESSION['login'] = 1;
@@ -43,7 +43,7 @@ if (!empty($_POST)) {
     <div id="mm">
       <?php
       if (isset($_SESSION['login'])) {
-        // 如果有login以下都看得到
+        // 如果有管理者login以下都看得到
       ?>
         <div class="ct a rb" style="position:relative; width:101.5%; left:-1%; padding:3px; top:-9px;">
           <a href="?do=tit">網站標題管理</a>|
@@ -52,8 +52,8 @@ if (!empty($_POST)) {
           <a href="?do=movie">院線片管理</a>|
           <a href="?do=order">電影訂票管理</a>
         </div>
+        <!-- 後台的內容 -->
         <div class="rb tab">
-
           <?php
           $do = $_GET['do'] ?? 'main';
           $file = "./back/{$do}.php";
@@ -65,9 +65,12 @@ if (!empty($_POST)) {
           }
           ?>
         </div>
+
       <?php
       } else {
+      
       ?>
+
         <form action="?" method="post" style="width: 50%;margin-top:20px auto">
           <h3 class="ct">管理者登入</h3>
           <!-- 如果登入錯誤會顯示紅字帳號密碼錯誤 -->
