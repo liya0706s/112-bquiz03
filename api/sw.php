@@ -2,7 +2,8 @@
 
 include_once "db.php";
 
-// POST參數是從poster的script AJAX來的
+// POST參數是從poster和movie 的script AJAX來的
+// 兩者都有控制上下紐
 
 // $row這一筆資料 ; $sw要交換的資料
 // 用$tmp暫存rank值
