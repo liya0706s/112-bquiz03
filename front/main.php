@@ -1,6 +1,6 @@
 <style>
   .lists {
-    position: relative;
+    /* position: relative; */
     left: 114px;
   }
 
@@ -12,7 +12,7 @@
     width: 210px;
     height: 240px;
     margin: auto;
-    position: relative;
+    /* position: relative; */
     box-sizing: border-box;
     display: none;
   }
@@ -45,9 +45,23 @@
   .btns {
     width: 380px;
     height: 100px;
-    background-color: lightcyan;
-    display:flex;
+    /* background-color: lightcyan; */
+    display: flex;
     overflow: hidden;
+  }
+
+
+  .btn img {
+    width: 80px;
+    height: 90px;
+  }
+
+  .btn {
+    font-size: 12px;
+    text-align: center;
+    width: 90px;
+    flex-shrink: 0;
+    position: relative;
   }
 
   .controls {
@@ -55,19 +69,10 @@
     height: 100px;
     position: relative;
     margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-  }
-  .btn img{
-    width: 80px;
-    height: 90px;
-  }
-
-  .btn{
-    font-size: 12px;
-    text-align: center;
-    width: 90px;
-    flex-shrink: 0;
-    
   }
 </style>
 <div class="half" style="vertical-align:top;">
@@ -83,7 +88,7 @@
       ?>
         <div class="item">
           <div><img src="./img/<?= $poster['img']; ?>" alt=""></div>
-          <div></div>
+          <div><?= $poster['name']; ?></div>
 
         </div>
       <?php
@@ -97,9 +102,9 @@
         foreach ($posters as $idx => $poster) {
         ?>
           <div class="btn">
-            <div><img src="./img/<?= $poster['img']; ?>"></div> 
+            <div><img src="./img/<?= $poster['img']; ?>"></div>
             <!-- 圖片 -->
-            <div><?=$poster['name'];?></div>
+            <div><?= $poster['name']; ?></div>
             <!-- 名稱 -->
           </div>
         <?php
@@ -115,6 +120,48 @@
 <script>
   // eq代表 位置在哪裡
   $(".item").eq(0).show();
+
+  // 指定給一個變數
+  let now = 0; // eq(0)
+  let timer = setInterval({slide()}, 3000);
+  function slide() {
+    // eq()隱藏全部,eq(1.2.3.4...)顯示按照順序
+    $(".item").hide();
+    now++;
+    if(now<=8){
+          $(".item").eq().show();
+
+    }
+  }
+
+
+
+  let total = $(".btn").length();
+  // 全域變數，可以不停被改變
+  let p = 0;
+  console.log('total', total);
+  // 限制p的最大值和最小值
+  // 判斷p+-1會不會超過上限
+  //  往左邊移動，與右邊的距離.. 
+  $('.left,.right').on("click", function() {
+    let arrow = $(this).attr('class');
+    switch (arrow) {
+      case "right":
+        if (p + 1 <= (total - 4)) {
+          p = p + 1;
+
+        }
+        break;
+      case "left":
+        if (p - 1 >= 0) {
+          p = p - 1;
+        }
+        break;
+    }
+    $(".btn").animate({
+      right: 90 * p
+    });
+  })
 </script>
 
 <style>
@@ -129,7 +176,7 @@
     box-sizing: border-box;
     /* 不受到padding的影響 */
     padding: 2px;
-    margin: 0.25%;
+    margin: 0.5%;
     border: 1px solid #ccc;
     border-radius: 5px;
     width: 49%;
@@ -164,7 +211,7 @@
           <div style="width:65%">
             <div><?= $movie['name']; ?></div>
             <div style="font-size:13px;">分級:
-              <img src="./icon/03C0<?= $movie['level']; ?>.png" style="width:20%">
+              <img src="./icon/03C0<?= $movie['level']; ?>.png" style="width:20px">
             </div>
             <div style="font-size:13px;">上映日期:
               <?= $movie['ondate']; ?>
