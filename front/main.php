@@ -1,14 +1,121 @@
+<style>
+  .lists {
+    position: relative;
+    left: 114px;
+  }
+
+  .item * {
+    box-sizing: border-box;
+  }
+
+  .item {
+    width: 210px;
+    height: 240px;
+    margin: auto;
+    position: relative;
+    box-sizing: border-box;
+    display: none;
+  }
+
+  .item div img {
+    width: 100%;
+    height: 220px;
+  }
+
+  .item div {
+    text-align: center;
+  }
+
+  .left,
+  .right {
+    width: 0;
+    border: 20px solid black;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+  }
+
+  .left {
+    border-left-width: 0;
+  }
+
+  .right {
+    border-right-width: 0;
+  }
+
+  .btns {
+    width: 380px;
+    height: 100px;
+    background-color: lightcyan;
+    display:flex;
+    overflow: hidden;
+  }
+
+  .controls {
+    width: 420px;
+    height: 100px;
+    position: relative;
+    margin-top: 10px;
+
+  }
+  .btn img{
+    width: 80px;
+    height: 90px;
+  }
+
+  .btn{
+    font-size: 12px;
+    text-align: center;
+    width: 90px;
+    flex-shrink: 0;
+    
+  }
+</style>
 <div class="half" style="vertical-align:top;">
   <h1>預告片介紹</h1>
+  <!-- 動畫控制 -->
   <div class="rb tab" style="width:95%;">
-    <div id="abgne-block-20111227">
-      <ul class="lists">
-      </ul>
-      <ul class="controls">
-      </ul>
+    <div class="lists">
+      <?php
+      // 1.撈資料
+      $posters = $Poster->all(['sh' => 1], " order by rank");
+      // 2. foreach 
+      foreach ($posters as $poster) {
+      ?>
+        <div class="item">
+          <div><img src="./img/<?= $poster['img']; ?>" alt=""></div>
+          <div></div>
+
+        </div>
+      <?php
+      }
+      ?>
+    </div>
+    <div class="controls">
+      <div class="left"></div>
+      <div class="btns">
+        <?php
+        foreach ($posters as $idx => $poster) {
+        ?>
+          <div class="btn">
+            <div><img src="./img/<?= $poster['img']; ?>"></div> 
+            <!-- 圖片 -->
+            <div><?=$poster['name'];?></div>
+            <!-- 名稱 -->
+          </div>
+        <?php
+
+        }
+        ?>
+      </div>
+      <div class="right"></div>
+
     </div>
   </div>
 </div>
+<script>
+  // eq代表 位置在哪裡
+  $(".item").eq(0).show();
+</script>
 
 <style>
   .movies {

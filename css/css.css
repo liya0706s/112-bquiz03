@@ -139,7 +139,8 @@ input:focus
 	display:block;
 	margin-left:auto;
 	margin-right:auto;
-	min-height:100px;
+	min-height:360px; 
+	/* 2024-01-12 預告片介紹高度 */
 	padding:10px;
 }
 .ts

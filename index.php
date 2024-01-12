@@ -31,7 +31,7 @@
     <div id="mm">
       <?php
       $do = $_GET['do'] ?? 'main';
-      $file = "./index/{$do}.php";
+      $file = "./front/{$do}.php";
       if (file_exists($file)) {
         include $file;
       } else {
