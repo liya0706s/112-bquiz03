@@ -69,7 +69,8 @@
                 <!-- 按鈕 -->
                 <div>
                     <!--按鈕代表現在的顯示與否狀況，現在顯示的是跟資料庫一樣的 -->
-                    <button class="show-btn" data-id="<?= $movie['id']; ?>" <?= ($movie['sh'] == 1) ? '顯示' : '隱藏'; ?>></button>
+                    <button class="show-btn" data-id="<?= $movie['id']; ?>">
+                    <?= ($movie['sh'] == 1) ? '顯示' : '隱藏'; ?></button>
                     <button class="sw-btn" data-id="<?= $movie['id']; ?>" data-sw="<?= ($idx !== 0) ? $movies[$idx - 1]['id'] : $movie['id']; ?>">
                         <!-- 如果idx不是0代表不是在位置第一個，就要將順序往上idx-1,否則就留在原地$movie的id -->
                         往上</button>
@@ -125,7 +126,10 @@
         })
 
         $(".edit-btn").on("click", function() {
-
+            let id=$(this).data('id');
+            // 這個的data的id
+            location.href=`?do=edit_movie&id=${id}`;
+            // 重音符可以混合使用一班字串和變數${id}
         })
 
         // 刪除院線片功能
