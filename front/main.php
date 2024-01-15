@@ -125,18 +125,23 @@
   $(".item").eq(0).show();
   let total = $(".btn").length
   // 指定給一個變數
-  let now = 0; // eq(0)
+  let now = 0;
+  let next = 0;
   let timer = setInterval(() => {
     slide()
   }, 3000)
 
-  function slide() {
+  function slide(n) {
     // eq()隱藏全部,eq(1.2.3.4...)顯示按照順序
     let ani = $(".item").eq(now).data("ani");
-    let next = now + 1;
-    // console.log(ani);
-    if (next >= total) {
-      next = 0;
+
+    if (typeof(n) == 'undefined') {
+      next = now + 1;
+      if (next >= total) {
+        next = 0;
+      }
+    } else {
+      next = n;
     }
 
     switch (ani) {
@@ -182,6 +187,12 @@
       right: 90 * p
     })
   })
+
+  $(".btn").on('click', function() {
+    let idx = $(this).index()
+    slide(idx);
+  })
+
   $(".btns").hover(
     function() {
       clearInterval(timer)
@@ -225,25 +236,29 @@
       $today = date("Y-m-d");
       // 開始的時間今天往前算兩天
       $ondate = date("Y-m-d", strtotime("-2 days"));
-      $total = $Movie->count(" where `ondate`>='$ondate' && `ondate` <='$today' && `sh`=1");
+      // 以上兩個變數也要搬到get_movies.php 
+
+
+      $total = $Movie->count(" where `ondate`>='$ondate'  && `ondate` <='$today'  && `sh`=1");
       $div = 4;
       $pages = ceil($total / $div);
       $now = $_GET['p'] ?? 1;
       $start = ($now - 1) * $div;
       // 顯示排序過且三天內的前四筆影片
-      $movies = $Movie->all(" where `ondate`>='$ondate' && `ondate` <='$today' && `sh`=1 order by rank limit $start,$div");
+      $movies = $Movie->all(" where `ondate`>='$ondate'  && `ondate` <='$today'  && `sh`=1 order by rank limit $start,$div");
+      // 以上get_movies.php也有用到
       foreach ($movies as $movie) {
       ?>
         <div class="movie">
           <div style="width:35%">
             <!-- 連結可以看詳細資料帶自己的id -->
-            <a href="?do=intro&id=<?= $movie['id']; ?>">
+            <a href='?do=intro&id=<?= $movie['id']; ?>'>
               <img src="./img/<?= $movie['poster']; ?>" style="width:60px;border:3px solid white">
             </a>
           </div>
           <div style="width:65%">
             <div><?= $movie['name']; ?></div>
-            <div style="font-size:13px;">分級:<img src="./icon/03C0<?= $movie['level']; ?>.png" style="width:20px"></div>
+            <div style="font-size:13px;">分級: <img src="./icon/03C0<?= $movie['level']; ?>.png" style="width:20px"></div>
             <div style="font-size:13px;">上映日期:<?= $movie['ondate']; ?></div>
           </div>
           <div style="width:100%">
@@ -271,6 +286,6 @@
         echo "<a href='?p=$next'> > </a>";
       }
       ?>
-    </div>
+      </div>
   </div>
 </div>
