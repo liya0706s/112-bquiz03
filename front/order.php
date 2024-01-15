@@ -66,3 +66,6 @@
         })
     }
 </script>
+
+<!-- button上一步和button確定--
+把#select顯示 #booking隱藏;其中一個要選擇隱藏，可以改成都toggle -->
