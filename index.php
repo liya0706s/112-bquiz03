@@ -30,12 +30,14 @@
     </div>
     <div id="mm">
       <?php
+      // 如果有$_GET['do']亂碼，也會導到亂碼
       $do = $_GET['do'] ?? 'main';
       $file = "./front/{$do}.php";
+      // 防止跑到亂打的?do=xxx,條件是"要有這個檔案存在"
       if (file_exists($file)) {
         include $file;
       } else {
-        // 要寫else，避免被打亂碼導不到網址
+        // 要寫else，避免被打亂碼導不到網址。讓他到front/main.php
         include "./front/main.php";
       }
       ?>
