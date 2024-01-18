@@ -89,7 +89,6 @@
         <div class="item" data-ani="<?= $poster['ani']; ?>">
           <div><img src="./img/<?= $poster['img']; ?>" alt=""></div>
           <div><?= $poster['name']; ?></div>
-
         </div>
       <?php
       }

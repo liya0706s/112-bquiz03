@@ -12,12 +12,14 @@ $_POST['img']=$_FILES['poster']['name'];
 }
 dd($_POST);
 
+// 預設都是顯示
 $_POST['sh']=1;
 $_POST['rank']=$Poster->max('id')+1;
 // max('id')是fetchColumn就是那一筆值
 // 排序是"交換"的道理
 // 用最大的id+1，就知道新的資料是多少
 $_POST['ani']=rand(1,3);
+// rand是random意思
 
 
 $Poster->save($_POST);

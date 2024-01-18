@@ -8,11 +8,10 @@
         <p style="margin:3px">影片名稱 ：<?=$movie['name'];?>
           <input type="button" value="線上訂票" onclick="location.href='?do=order&id=<?=$movie['id'];?>'" style="margin-left:50px; padding:2px 4px" class="b2_btu">
         </p>
-        <p style="margin:3px">影片分級 ：
-         <img src="icon/03C0<?=$movie['level'];?>.png" style="display:inline-block;"></p>
+        <p style="margin:3px">影片分級 ：<img src="icon/03C0<?=$movie['level'];?>.png" style="display:inline-block;"></p>
         <p style="margin:3px">影片片長 ： <?=$movie['length'];?>分鐘</p>
         <p style="margin:3px">上映日期： <?=$movie['ondate'];?></p>
-        <p style="margin:3px">發行商 ：<?=$movie['publish'];?> </p>
+        <p style="margin:3px">發行商 ：<?=$movie['publish'];?></p>
         <p style="margin:3px">導演 ： <?=$movie['director'];?></p>
         <br>
         <br>
