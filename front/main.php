@@ -1,7 +1,10 @@
 <style>
   .lists {
-    /* position: relative; */
+    position: relative;
     left: 114px;
+    width: 200px;
+    height: 240px;
+    overflow: hidden;
   }
 
   .item * {
@@ -9,12 +12,12 @@
   }
 
   .item {
-    width: 210px;
+    width: 200px;
     height: 240px;
     margin: auto;
-    /* position: relative; */
     box-sizing: border-box;
     display: none;
+    position: absolute;
   }
 
   .item div img {
@@ -43,24 +46,22 @@
   }
 
   .btns {
-    width: 380px;
+    width: 360px;
     height: 100px;
-    /* background-color: lightcyan; */
     display: flex;
     overflow: hidden;
   }
 
-
   .btn img {
-    width: 80px;
-    height: 90px;
+    width: 60px;
+    height: 80px;
   }
 
   .btn {
     font-size: 12px;
     text-align: center;
-    width: 90px;
     flex-shrink: 0;
+    width: 90px;
     position: relative;
   }
 
@@ -72,7 +73,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-
   }
 </style>
 <div class="half" style="vertical-align:top;">
@@ -84,9 +84,9 @@
       // 1.撈資料
       $posters = $Poster->all(['sh' => 1], " order by rank");
       // 2. foreach 
-      foreach ($posters as $poster) {
+      foreach ($posters as $idx => $poster) {
       ?>
-        <div class="item">
+        <div class="item" data-ani="<?= $poster['ani']; ?>">
           <div><img src="./img/<?= $poster['img']; ?>" alt=""></div>
           <div><?= $poster['name']; ?></div>
 
@@ -95,6 +95,7 @@
       }
       ?>
     </div>
+
     <div class="controls">
       <div class="left"></div>
       <div class="btns">
@@ -113,43 +114,67 @@
         ?>
       </div>
       <div class="right"></div>
-
     </div>
   </div>
 </div>
 <script>
+  // 2024-01-15
+  // 回乎函式，我做完之後才怎麼樣子
+
   // eq代表 位置在哪裡
   $(".item").eq(0).show();
-
+  let total = $(".btn").length
   // 指定給一個變數
-  let now = 0; // eq(0)
-  let timer = setInterval({slide()}, 3000);
-  function slide() {
-    // eq()隱藏全部,eq(1.2.3.4...)顯示按照順序
-    $(".item").hide();
-    now++;
-    if(now<=8){
-          $(".item").eq().show();
+  let now = 0;
+  let next = 0;
+  let timer = setInterval(() => {
+    slide()
+  }, 3000)
 
+  function slide(n) {
+    // eq()隱藏全部,eq(1.2.3.4...)顯示按照順序
+    let ani = $(".item").eq(now).data("ani");
+
+    if (typeof(n) == 'undefined') {
+      next = now + 1;
+      if (next >= total) {
+        next = 0;
+      }
+    } else {
+      next = n;
     }
+
+    switch (ani) {
+      case 1:
+        $(".item").eq(now).fadeOut(1000, function() {
+          $(".item").eq(next).fadeIn(1000);
+        });
+        break;
+      case 2:
+        $(".item").eq(now).hide(1000, function() {
+          $(".item").eq(next).show(1000);
+        });
+        break;
+      case 3:
+        $(".item").eq(now).slideUp(1000, function() {
+          $(".item").eq(next).slideDown(1000);
+        });
+        break;
+    }
+    now = next;
   }
 
-
-
-  let total = $(".btn").length();
   // 全域變數，可以不停被改變
   let p = 0;
-  console.log('total', total);
   // 限制p的最大值和最小值
   // 判斷p+-1會不會超過上限
   //  往左邊移動，與右邊的距離.. 
-  $('.left,.right').on("click", function() {
-    let arrow = $(this).attr('class');
+  $(".left,.right").on("click", function() {
+    let arrow = $(this).attr('class')
     switch (arrow) {
       case "right":
         if (p + 1 <= (total - 4)) {
           p = p + 1;
-
         }
         break;
       case "left":
@@ -160,8 +185,26 @@
     }
     $(".btn").animate({
       right: 90 * p
-    });
+    })
   })
+
+  $(".btn").on('click', function() {
+    let idx = $(this).index()
+    slide(idx);
+  })
+
+  $(".btns").hover(
+    function() {
+      clearInterval(timer)
+      // hover in clearInterval(上方的timer變數)
+    },
+    function() {
+      // 三秒後產生動畫
+      timer = setInterval(() => {
+        slide()
+      }, 3000)
+    }
+  )
 </script>
 
 <style>
@@ -189,33 +232,34 @@
     <div class="movies">
       <!-- 顯示排序過且三天內的前四筆影片 -->
       <?php
-      $today = date("Y-m-d");  //今天的日期
+      //今天的日期
+      $today = date("Y-m-d");
       // 開始的時間今天往前算兩天
       $ondate = date("Y-m-d", strtotime("-2 days"));
-      $total = $Movie->count(" where `ondate`>='$ondate' && `ondate` <='$today' && `sh`=1");
+      // 以上兩個變數也要搬到get_movies.php 
+
+
+      $total = $Movie->count(" where `ondate`>='$ondate'  && `ondate` <='$today'  && `sh`=1");
       $div = 4;
       $pages = ceil($total / $div);
       $now = $_GET['p'] ?? 1;
       $start = ($now - 1) * $div;
       // 顯示排序過且三天內的前四筆影片
-      $movies = $Movie->all(" where `ondate`>='$ondate' && `ondate` <='$today' && `sh`=1 order by rank limit $start,$div");
+      $movies = $Movie->all(" where `ondate`>='$ondate'  && `ondate` <='$today'  && `sh`=1 order by rank limit $start,$div");
+      // 以上get_movies.php也有用到
       foreach ($movies as $movie) {
       ?>
         <div class="movie">
           <div style="width:35%">
             <!-- 連結可以看詳細資料帶自己的id -->
-            <a href="?do=intro&id=<?= $movie['id']; ?>">
-              <img src="./img/<?= $movie['poster']; ?>" style="width:60px;border:3px white">
+            <a href='?do=intro&id=<?= $movie['id']; ?>'>
+              <img src="./img/<?= $movie['poster']; ?>" style="width:60px;border:3px solid white">
             </a>
           </div>
           <div style="width:65%">
             <div><?= $movie['name']; ?></div>
-            <div style="font-size:13px;">分級:
-              <img src="./icon/03C0<?= $movie['level']; ?>.png" style="width:20px">
-            </div>
-            <div style="font-size:13px;">上映日期:
-              <?= $movie['ondate']; ?>
-            </div>
+            <div style="font-size:13px;">分級: <img src="./icon/03C0<?= $movie['level']; ?>.png" style="width:20px"></div>
+            <div style="font-size:13px;">上映日期:<?= $movie['ondate']; ?></div>
           </div>
           <div style="width:100%">
             <button onclick="location.href='?do=intro&id=<?= $movie['id']; ?>'">劇情介紹</button>
@@ -241,8 +285,7 @@
         $next = $now + 1;
         echo "<a href='?p=$next'> > </a>";
       }
-
       ?>
-    </div>
+      </div>
   </div>
 </div>
