@@ -229,13 +229,13 @@
   <h1>院線片清單</h1>
   <div class="rb tab" style="width:95%;">
     <div class="movies">
-      <!-- 顯示排序過且三天內的前四筆影片 -->
+      <!-- 顯示 排序過 且三天內 的前四筆影片 -->
       <?php
       //今天的日期
       $today = date("Y-m-d");
       // 開始的時間今天往前算兩天
       $ondate = date("Y-m-d", strtotime("-2 days"));
-      // 以上兩個變數也要搬到get_movies.php 
+      // 以上兩個變數也要搬到api/get_movies.php 
 
 
       $total = $Movie->count(" where `ondate`>='$ondate'  && `ondate` <='$today'  && `sh`=1");

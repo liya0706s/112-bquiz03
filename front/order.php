@@ -1,25 +1,47 @@
-<h3 class="ct">線上訂票</h3>
-<div class="order">
-    <div>
-        <label>電影：</label>
-        <select name="movie" id="movie">
+<div id='select'>
+    <h3 class="ct">線上訂票</h3>
+    <div class="order">
+        <div>
+            <label>電影：</label>
+            <select name="movie" id="movie">
 
-        </select>
+            </select>
+        </div>
+        <div>
+            <label>日期：</label>
+            <select name="date" id="date"></select>
+        </div>
+        <div>
+            <label>場次：</label>
+            <select name="session" id="session"></select>
+        </div>
+        <div>
+            <button onclick="$('#select').hide();$('#booking').show()">確定</button>
+            <button>重置</button>
+        </div>
     </div>
-    <div>
-        <label>日期：</label>
-        <select name="date" id="date"></select>
-    </div>
-    <div>
-        <label>場次：</label>
-        <select name="session" id="session"></select>
-    </div>
-    <div>
-        <button>確定</button>
-        <button>重置</button>
+</div>
+<style>
+    #room {
+        background-image: url('./icon/03D04.png');
+        background-position: center;
+        background-repeat: none;
+        width: 540px;
+        height: 370px;
+        margin: auto;
+
+
+    }
+</style>
+<div id="booking" style='display:none'>
+    <div id="room"></div>
+    <div id="info">
+        <button onclick="$('#select').show();$('#booking').hide()">上一步</button>
+        <button>訂購</button>
     </div>
 </div>
 <script>
+    let url = new URL(window.location.href)
     getMovies();
 
     // 當電影改變的時候日期也要改變選項的函式
@@ -37,6 +59,10 @@
             // callback function
             // 會產生很多option
             $("#movie").html(movies);
+            if (url.searchParams.has('id')) {
+                $(`#movie option[value='${url.searchParams.get('id')}']`).prop('selected', true);
+            }
+
             getDates($("#movie").val())
             // movie的id 就是movie的val()
         })
@@ -47,7 +73,7 @@
             id
         }, (dates) => {
             // 會產生很多option
-            console.log(dates)
+            // console.log(dates)
             $("#date").html(dates);
             let movie = $("#movie").val()
             let date = $("#date").val()

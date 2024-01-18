@@ -1,5 +1,4 @@
-<?php
-include_once "db.php";
+<?php include_once 'db.php';
 
 $today = date("Y-m-d");
 $ondate = date("Y-m-d", strtotime("-2 days"));
