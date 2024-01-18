@@ -173,3 +173,4 @@ $Poster = new DB('poster');
 $Movie = new DB('movie');
 $Order = new DB('orders');
 
+?>
