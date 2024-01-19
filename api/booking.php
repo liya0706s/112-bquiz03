@@ -28,7 +28,7 @@ $session = $_GET['session'];
         width: 63px;
         height: 85px;
         position: relative;
-/* 相對椅子 */
+        /* 相對椅子 */
     }
 
     .seats {
@@ -36,11 +36,11 @@ $session = $_GET['session'];
         flex-wrap: wrap;
     }
 
-    .chk{
+    .chk {
         position: absolute;
         /* 絕對位置 */
-        right:1px;
-        bottom:2px;
+        right: 1px;
+        bottom: 2px;
     }
 </style>
 <div id="room">
@@ -50,7 +50,7 @@ $session = $_GET['session'];
         for ($i = 0; $i < 20; $i++) {
             echo "<div class='seat'>";
             echo "<div class='ct'>";
-            echo floor($i / 5) + 1 . "排";   // 無條件捨去
+            echo (floor($i / 5) + 1) . "排";   // 無條件捨去
             echo (($i % 5) + 1) . "號";
             echo "</div>";
             echo "<div class='ct'>";
@@ -67,6 +67,50 @@ $session = $_GET['session'];
     <div>您選擇的時刻是：<?= $date; ?> <?= $session; ?></div>
     <div>您已經勾選<span id='tickets'>0</span>張票，最多可以購買四張票</div>
     <button onclick="$('#select').show();$('#booking').hide()">上一步</button>
-    <button>訂購</button>
+    <button onclick="checkout()">訂購</button>
 </div>
 </div>
+
+<script>
+    // 變數儲存勾選的內容，新的空陣列
+    // 宣告一個全域變數seats，用於儲存被勾選的座位，初始為一個空陣列
+    let seats = new Array(); // 使用 new Array() 創建一個新的陣列物件(物件帶有方法)
+
+    // 狀態被改變，變成checked
+    $(".chk").on("change", function() {
+        // 1.座位狀態是有被勾選 2.幾張票 3.能否再勾選
+        // 只有在勾選true才要在陣列中;取消勾選時，不增加也要減少
+        if ($(this).prop('checked')) {
+            if (seats.length + 1 <= 4) {
+                seats.push($(this).val())
+            } else {
+                $(this).prop('checked', false)
+                alert("每個人只能勾選四張票")
+            }
+
+        } else {
+            // 若勾選框被取消勾選，則從陣列中移除該座位
+            seats.splice(seats.indexOf($(this).val()), 1)
+        }
+
+        // console.log($(this).prop('checked'), $(this).val());
+        $("#tickets").text(seats.length) // 計算陣列個數，勾選了幾張票
+
+    });
+
+    // 寫入的參數key是order資料表的欄位
+    // 上方按下訂購checkout()
+    function checkout() {
+        $.post("./api/checkout.php", {
+                movie: '<?= $movie['name']; ?>',
+                date: '<?= $date; ?>',
+                session: '<?= $session; ?>',
+                qty: seats.length,
+                seats
+            },
+            (no) => {
+                location.href = `?do=result&no=${no}`;
+            })
+
+    }
+</script>
