@@ -16,30 +16,17 @@
             <select name="session" id="session"></select>
         </div>
         <div>
-            <button onclick="$('#select').hide();$('#booking').show()">確定</button>
+            <button onclick="booking()">確定</button>
+            <!-- 用ajax傳到api/booking -->
             <button>重置</button>
         </div>
     </div>
 </div>
-<style>
-    #room {
-        background-image: url('./icon/03D04.png');
-        background-position: center;
-        background-repeat: none;
-        width: 540px;
-        height: 370px;
-        margin: auto;
 
-
-    }
-</style>
 <div id="booking" style='display:none'>
-    <div id="room"></div>
-    <div id="info">
-        <button onclick="$('#select').show();$('#booking').hide()">上一步</button>
-        <button>訂購</button>
-    </div>
+
 </div>
+
 <script>
     let url = new URL(window.location.href)
     getMovies();
@@ -76,6 +63,7 @@
             // console.log(dates)
             $("#date").html(dates);
             let movie = $("#movie").val()
+            // 用val()拿電影場次
             let date = $("#date").val()
             getSessions(movie, date)
         })
@@ -90,6 +78,21 @@
             // 會產生很多option
             $("#session").html(sessions);
         })
+    }
+
+    function booking() {
+        let order = {
+            movie_id: $("#movie").val(),
+            date: $("#date").val(),
+            session: $("#session").val()
+        }
+        $.get("./api/booking.php", order, (booking) => {
+            $("#booking").html(booking)
+            // 先跟api拿到資料後，才hide show動作
+            $('#select').hide();
+            $('#booking').show()
+        })
+
     }
 </script>
 
