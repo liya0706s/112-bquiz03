@@ -6,7 +6,19 @@ $movie = $Movie->find($_GET['movie_id']);
 $date = $_GET['date'];
 $session = $_GET['session'];
 
-
+$ords = $Order->all([
+    'movie' => $movie['name'],
+    'date' => $date,
+    'session' => $session
+]);
+// 起始空陣列
+$seats = [];
+foreach ($ords as $ord) {
+    // 把serialize的陣列資料還原成陣列
+    $tmp = unserialize($ord['seats']);
+    $seats = array_merge($seats, $tmp);
+}
+// dd($seats);
 
 ?>
 
@@ -50,13 +62,27 @@ $session = $_GET['session'];
         for ($i = 0; $i < 20; $i++) {
             echo "<div class='seat'>";
             echo "<div class='ct'>";
-            echo (floor($i / 5) + 1) . "排";   // 無條件捨去
+            echo (floor($i / 5) + 1) . "排";   
+            // 無條件捨去
             echo (($i % 5) + 1) . "號";
             echo "</div>";
             echo "<div class='ct'>";
-            echo "<img src='./icon/03D02.png'>";  // 空座位
+            // 判斷有沒有座位
+            if (in_array($i, $seats)) {  
+            // 已經被訂了
+                echo "<img src='./icon/03D03.png'>";
+            } else {   
+                // 沒有被定位
+                echo "<img src='./icon/03D02.png'>";
+            }
+            // echo "<img src='./icon/03D02.png'>";  
+            // 空座位假資料
             echo "</div>";
-            echo "<input type='checkbox' name='chk' value='$i' class='chk'>";  // 用絕對定位讓checkbox放在特定位置
+            // 不能選座位 判斷式
+            if (!in_array($i, $seats)) {
+                echo "<input type='checkbox' name='chk' value='$i' class='chk'>";
+            }
+            // echo "<input type='checkbox' name='chk' value='$i' class='chk'>";
             echo "</div>";
         }
         ?>
@@ -94,7 +120,8 @@ $session = $_GET['session'];
         }
 
         // console.log($(this).prop('checked'), $(this).val());
-        $("#tickets").text(seats.length) // 計算陣列個數，勾選了幾張票
+        $("#tickets").text(seats.length) 
+        // 計算陣列個數，勾選了幾張票
 
     });
 
